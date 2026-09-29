@@ -38,6 +38,16 @@ export async function createSubdomainAction(
     };
   }
 
+  if (!process.env.KV_REST_API_URL || !process.env.KV_REST_API_TOKEN) {
+    return {
+      subdomain,
+      icon,
+      success: false,
+      error:
+        'Redis is not configured. Set KV_REST_API_URL and KV_REST_API_TOKEN to create a subdomain.'
+    };
+  }
+
   const subdomainAlreadyExists = await redis.get(
     `subdomain:${sanitizedSubdomain}`
   );
