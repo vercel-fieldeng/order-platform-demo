@@ -30,13 +30,7 @@ type CreateState = {
   icon?: string;
 };
 
-function SubdomainInput({
-  defaultValue,
-  isPreview
-}: {
-  defaultValue?: string;
-  isPreview: boolean;
-}) {
+function SubdomainInput({ defaultValue }: { defaultValue?: string }) {
   return (
     <div className="space-y-2">
       <Label htmlFor="subdomain">Subdomain</Label>
@@ -52,7 +46,7 @@ function SubdomainInput({
           />
         </div>
         <span className="bg-gray-100 px-3 border border-l-0 border-input rounded-r-md text-gray-500 min-h-[36px] flex items-center">
-          {isPreview ? 'on this preview' : `.${rootDomain}`}
+          .{rootDomain}
         </span>
       </div>
     </div>
@@ -130,7 +124,7 @@ function IconPicker({
   );
 }
 
-export function SubdomainForm({ isPreview }: { isPreview: boolean }) {
+export function SubdomainForm() {
   const [icon, setIcon] = useState('');
 
   const [state, action, isPending] = useActionState<CreateState, FormData>(
@@ -140,7 +134,7 @@ export function SubdomainForm({ isPreview }: { isPreview: boolean }) {
 
   return (
     <form action={action} className="space-y-4">
-      <SubdomainInput defaultValue={state?.subdomain} isPreview={isPreview} />
+      <SubdomainInput defaultValue={state?.subdomain} />
 
       <IconPicker icon={icon} setIcon={setIcon} defaultValue={state?.icon} />
 
