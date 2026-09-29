@@ -17,7 +17,7 @@ export default async function HomePage() {
       <div className="w-full max-w-md space-y-8">
         <div className="text-center">
           <h1 className="text-4xl font-bold tracking-tight text-gray-900">
-            {rootDomain}
+            {process.env.VERCEL_ENV === 'preview' ? 'Subdomain preview' : rootDomain}
           </h1>
           <p className="mt-3 text-lg text-gray-600">
             Create your own subdomain with a custom emoji
@@ -25,7 +25,7 @@ export default async function HomePage() {
         </div>
 
         <div className="mt-8 bg-white shadow-md rounded-lg p-6">
-          <SubdomainForm />
+          <SubdomainForm isPreview={process.env.VERCEL_ENV === 'preview'} />
         </div>
       </div>
     </div>

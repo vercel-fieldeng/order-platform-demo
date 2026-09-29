@@ -65,6 +65,11 @@ export async function createSubdomainAction(
     createdAt: Date.now()
   });
 
+  // Preview deployments do not have wildcard tenant domains; use the tenant route.
+  if (process.env.VERCEL_ENV === 'preview') {
+    redirect(`/s/${sanitizedSubdomain}`);
+  }
+
   redirect(`${protocol}://${sanitizedSubdomain}.${rootDomain}`);
 }
 

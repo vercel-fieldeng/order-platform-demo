@@ -19,7 +19,7 @@ type DeleteState = {
   success?: string;
 };
 
-function DashboardHeader() {
+function DashboardHeader({ isPreview }: { isPreview: boolean }) {
   // TODO: You can add authentication here with your preferred auth provider
 
   return (
@@ -27,10 +27,10 @@ function DashboardHeader() {
       <h1 className="text-3xl font-bold">Subdomain Management</h1>
       <div className="flex items-center gap-4">
         <Link
-          href={`${protocol}://${rootDomain}`}
+          href={isPreview ? '/' : `${protocol}://${rootDomain}`}
           className="text-sm text-gray-500 hover:text-gray-700 transition-colors"
         >
-          {rootDomain}
+          {isPreview ? 'Home' : rootDomain}
         </Link>
       </div>
     </div>
@@ -40,11 +40,13 @@ function DashboardHeader() {
 function TenantGrid({
   tenants,
   action,
-  isPending
+  isPending,
+  isPreview
 }: {
   tenants: Tenant[];
   action: (formData: FormData) => void;
   isPending: boolean;
+  isPreview: boolean;
 }) {
   if (tenants.length === 0) {
     return (
@@ -94,7 +96,11 @@ function TenantGrid({
             </div>
             <div className="mt-4">
               <a
-                href={`${protocol}://${tenant.subdomain}.${rootDomain}`}
+                href={
+                  isPreview
+                    ? `/s/${tenant.subdomain}`
+                    : `${protocol}://${tenant.subdomain}.${rootDomain}`
+                }
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-500 hover:underline text-sm"
@@ -109,7 +115,13 @@ function TenantGrid({
   );
 }
 
-export function AdminDashboard({ tenants }: { tenants: Tenant[] }) {
+export function AdminDashboard({
+  tenants,
+  isPreview
+}: {
+  tenants: Tenant[];
+  isPreview: boolean;
+}) {
   const [state, action, isPending] = useActionState<DeleteState, FormData>(
     deleteSubdomainAction,
     {}
@@ -117,8 +129,13 @@ export function AdminDashboard({ tenants }: { tenants: Tenant[] }) {
 
   return (
     <div className="space-y-6 relative p-4 md:p-8">
-      <DashboardHeader />
-      <TenantGrid tenants={tenants} action={action} isPending={isPending} />
+      <DashboardHeader isPreview={isPreview} />
+      <TenantGrid
+        tenants={tenants}
+        action={action}
+        isPending={isPending}
+        isPreview={isPreview}
+      />
 
       {state.error && (
         <div className="fixed bottom-4 right-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded shadow-md">

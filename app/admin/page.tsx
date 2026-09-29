@@ -14,7 +14,10 @@ export default async function AdminPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-8">
-      <AdminDashboard tenants={tenants} />
+      <AdminDashboard
+        tenants={tenants}
+        isPreview={process.env.VERCEL_ENV === 'preview'}
+      />
     </div>
   );
 }
